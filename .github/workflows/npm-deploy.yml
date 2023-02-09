@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mongodb:
-        image: ${{ inputs.use-mongo-version && 'mongo:${{ inputs.use-mongo-version }}' || '' }}
+        image: ${{ inputs.use-mongo-version && format('mongo:{0}', inputs.use-mongo-version) || '' }}
         ports:
           - 27017:27017
     steps:
