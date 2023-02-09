@@ -58,9 +58,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token }}
         run: |-
           if npm publish; then
-            echo "Successfully published to NPM" >> $GITHUB_OUTPUT
+            echo "Successfully published to NPM" >> $GITHUB_STEP_SUMMARY
           else
-            echo "Failed to publish to NPM" >> $GITHUB_OUTPUT
+            echo "Failed to publish to NPM" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
       - name: Create release
