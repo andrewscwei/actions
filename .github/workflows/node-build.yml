@@ -1,0 +1,94 @@
+on:
+  workflow_call:
+    inputs:
+      test-reporter:
+        description: Test reporter type
+        required: false
+        type: string
+      test-report-path:
+        description: Path to the test report
+        required: false
+        type: string
+      create-release:
+        default: false
+        description: Specifies if pushing release to registry
+        type: boolean
+      skip-tests:
+        default: false
+        description: Specifies if tests should run
+        type: boolean
+      artifacts-name:
+        default: build-artifacts
+        description: Artifacts name
+        type: string
+      artifacts-path:
+        description: Artifacts path (relative to working directory)
+        required: false
+        type: string
+      use_mongo:
+        default: false
+        description: Specifies if the MongoDB service should be used
+        type: boolean
+      mongo_version:
+        default: 5.0.5
+        description: MongoDB version (if service is used)
+        type: string
+    outputs:
+      artifacts-name:
+        description: Name of the uploaded artifacts
+        value: ${{ jobs.build.outputs.artifacts-name }}
+    secrets:
+      gh-access-token:
+        description: GitHub access token for checking out private repos
+        required: false
+jobs:
+  build:
+    name: Node
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: ${{ inputs.use_mongo && 'mongo:${{ inputs.mongo_version }}' || '' }}
+        ports:
+          - 27017:27017
+    outputs:
+      artifacts-name: ${{ inputs.artifacts-path && inputs.artifacts-name || '' }}
+      artifacts-path: ${{ inputs.artifacts-path }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.gh-access-token }}
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-npm-cache-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install Node modules
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Store artifacts
+        if: ${{ inputs.artifacts-path }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.artifacts-name }}
+          path: ${{ inputs.artifacts-path }}
+      - name: Test
+        if: ${{ !inputs.skip-tests }}
+        run: npm test
+      - name: Generate test report
+        if: ${{ inputs.test-reporter && !inputs.skip-tests }}
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Report
+          path: ${{ inputs.test-report-path }}
+          reporter: ${{ inputs.test-reporter }}
