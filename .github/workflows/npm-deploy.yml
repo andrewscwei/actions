@@ -1,32 +1,17 @@
 on:
   workflow_call:
     inputs:
-      test-reporter:
-        description: Test reporter type
-        required: false
-        type: string
-      test-report-path:
-        description: Path to the test report
-        required: false
-        type: string
       create-release:
         default: false
         description: Specifies if creating release
         type: boolean
-      skip-tests:
-        default: false
-        description: Specifies if tests should run
-        type: boolean
       artifacts-name:
         description: Name of the artifacts to download
-        required: false
+        required: true
         type: string
       artifacts-path:
         description: Path (relative to working directory) to download artifacts to
-        required: false
-        type: string
-      use-mongo-version:
-        description: Enables MongoDB service and uses the specified version
+        required: true
         type: string
     secrets:
       gh-access-token:
@@ -39,11 +24,6 @@ jobs:
   deploy:
     name: NPM
     runs-on: ubuntu-latest
-    services:
-      mongodb:
-        image: ${{ inputs.use-mongo-version && format('mongo:{0}', inputs.use-mongo-version) || '' }}
-        ports:
-          - 27017:27017
     steps:
       - name: Checkout
         uses: actions/checkout@v3

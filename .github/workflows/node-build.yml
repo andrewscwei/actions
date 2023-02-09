@@ -1,14 +1,6 @@
 on:
   workflow_call:
     inputs:
-      test-reporter:
-        description: Test reporter type
-        required: false
-        type: string
-      test-report-path:
-        description: Path to the test report
-        required: false
-        type: string
       skip-tests:
         default: false
         description: Specifies if tests should run
@@ -79,10 +71,3 @@ jobs:
       - name: Test
         if: ${{ !inputs.skip-tests }}
         run: npm test
-      - name: Generate test report
-        if: ${{ inputs.test-reporter && !inputs.skip-tests }}
-        uses: dorny/test-reporter@v1
-        with:
-          name: Test Report
-          path: ${{ inputs.test-report-path }}
-          reporter: ${{ inputs.test-reporter }}
