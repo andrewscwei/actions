@@ -25,13 +25,8 @@ on:
         description: Path (relative to working directory) to download artifacts to
         required: false
         type: string
-      use_mongo:
-        default: false
-        description: Specifies if the MongoDB service should be used
-        type: boolean
-      mongo_version:
-        default: 5.0.5
-        description: MongoDB version (if service is used)
+      use-mongo-version:
+        description: Enables MongoDB service and uses the specified version
         type: string
     secrets:
       gh-access-token:
@@ -46,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mongodb:
-        image: ${{ inputs.use_mongo && 'mongo:${{ inputs.mongo_version }}' || '' }}
+        image: ${{ inputs.use-mongo-version && 'mongo:${{ inputs.use-mongo-version }}' || '' }}
         ports:
           - 27017:27017
     steps:
