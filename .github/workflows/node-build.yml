@@ -9,10 +9,6 @@ on:
         description: Path to the test report
         required: false
         type: string
-      create-release:
-        default: false
-        description: Specifies if pushing release to registry
-        type: boolean
       skip-tests:
         default: false
         description: Specifies if tests should run
