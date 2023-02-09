@@ -13,8 +13,13 @@ on:
         description: Artifacts path (relative to working directory)
         required: false
         type: string
-      use-mongo-version:
-        description: Enables MongoDB service and uses the specified version
+      service-image:
+        description: Image of the service to use
+        required: false
+        type: string
+      service-port:
+        description: Port mapping of the service (i.e. <host_port>:<service_container_port>)
+        required: false
         type: string
     outputs:
       artifacts-name:
@@ -32,10 +37,10 @@ jobs:
     name: Node
     runs-on: ubuntu-latest
     services:
-      mongodb:
-        image: ${{ inputs.use-mongo-version && format('mongo:{0}', inputs.use-mongo-version) || '' }}
+      service:
+        image: ${{ inputs.service-image }}
         ports:
-          - 27017:27017
+          - ${{ inputs.service-port }}
     outputs:
       artifacts-name: ${{ inputs.artifacts-path && inputs.artifacts-name || '' }}
       artifacts-path: ${{ inputs.artifacts-path }}
