@@ -18,8 +18,8 @@ on:
         required: false
         type: string
       service-port:
+        default: 8080:8080
         description: Port mapping of the service (i.e. <host_port>:<service_container_port>)
-        required: false
         type: string
     outputs:
       artifacts-name:
