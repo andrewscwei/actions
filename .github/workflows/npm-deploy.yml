@@ -1,6 +1,10 @@
 on:
   workflow_call:
     inputs:
+      registry:
+        default: https://registry.npmjs.org
+        description: NPM package registry URL
+        type: string
       artifacts-name:
         description: Name of the artifacts to download
         required: true
@@ -15,7 +19,7 @@ on:
         required: false
       npm-auth-token:
         description: NPM auth token
-        required: true
+        required: false
 jobs:
   deploy:
     name: NPM
@@ -30,7 +34,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: .nvmrc
-          registry-url: https://registry.npmjs.org
+          registry-url: ${{ inputs.registry }}
       - name: Cache Node modules
         uses: actions/cache@v3
         with:
@@ -50,10 +54,10 @@ jobs:
           path: ${{ inputs.artifacts-path }}
       - name: Deploy to NPM
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token }}
+          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token && secrets.npm-auth-token || github.token }}
         run: |-
           if npm publish; then
-            echo "Successfully published to NPM" >> $GITHUB_STEP_SUMMARY
+            echo "Successfully published version \`$(npm pkg get version | sed 's/"//g')\`to NPM" >> $GITHUB_STEP_SUMMARY
           else
             echo "Failed to publish to NPM" >> $GITHUB_STEP_SUMMARY
             exit 1
