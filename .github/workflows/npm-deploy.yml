@@ -57,9 +57,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token && secrets.npm-auth-token || github.token }}
         run: |-
           if npm publish; then
-            echo "Successfully published version \`$(npm pkg get version | sed 's/"//g')\`to NPM" >> $GITHUB_STEP_SUMMARY
+            echo "Successfully published version \`$(npm pkg get version | sed 's/"//g')\`to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
           else
-            echo "Failed to publish to NPM" >> $GITHUB_STEP_SUMMARY
+            echo "Failed to publish to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
       - name: Create release
