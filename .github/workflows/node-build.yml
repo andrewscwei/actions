@@ -37,6 +37,9 @@ on:
       artifacts-name:
         description: Name of the uploaded artifacts
         value: ${{ jobs.build.outputs.artifacts-name }}
+      artifacts-path:
+        description: Path of the uploaded artifacts (relative to working directory)
+        value: ${{ jobs.build.outputs.artifacts-path }}
     secrets:
       gh-access-token:
         description: GitHub access token for checking out private repos
