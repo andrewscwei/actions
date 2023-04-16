@@ -20,11 +20,11 @@ jobs:
   build:
     uses: andrewscwei/workflows/.github/workflows/node-build.yml@master
     with:
-      skip-tests: <boolean=false> # Specifies if tests should run
       artifacts-name: <string="build-artifacts"> # Artifacts name
       artifacts-path: <string?> # Artifacts path (relative to working directory)
       service-image: <string?> # Image of the service to use
       service-port: <string="8080:8080"> # Port mapping of the service (i.e. <host_port>:<service_container_port>)
+      skip-tests: <boolean=false> # Specifies if tests should run
     secrets:
       gh-access-token: <string?> # GitHub access token for checking out private repos
 ```
@@ -43,6 +43,7 @@ deploy:
     with:
       artifacts-name: <string="build-artifacts"> # Name of the artifacts to download
       artifacts-path: <string?> # Path (relative to working directory) to download artifacts to
+      create-release: <boolean=false> # Specifies if a release should be created
     secrets:
       gh-access-token: <string?> # GitHub access token for checking out private repos
       npm-auth-token: <string?> # NPM auth token
@@ -63,6 +64,7 @@ deploy:
       artifacts-name: <string="build-artifacts"> # Name of the artifacts to download
       artifacts-path: <string?> # Path (relative to working directory) to download artifacts to
       branch-name: <string="gh-pages"> # Branch for GitHub Pages
+      create-release: <boolean=false> # Specifies if a release should be created
       deploy-path: <string=".gh-pages"> # Path to deploy to GitHub Pages
       run-command: <string?> # Command to run before deploying to GitHub Pages
     secrets:

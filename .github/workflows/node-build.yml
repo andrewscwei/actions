@@ -1,10 +1,6 @@
 on:
   workflow_call:
     inputs:
-      skip-tests:
-        default: false
-        description: Specifies if tests should run
-        type: boolean
       artifacts-name:
         default: build-artifacts
         description: Artifacts name
@@ -21,6 +17,10 @@ on:
         default: 8080:8080
         description: Port mapping of the service (i.e. <host_port>:<service_container_port>)
         type: string
+      skip-tests:
+        default: false
+        description: Specifies if tests should run
+        type: boolean
     outputs:
       artifacts-name:
         description: Name of the uploaded artifacts

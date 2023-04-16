@@ -13,6 +13,10 @@ on:
         default: gh-pages
         description: Branch for GitHub Pages
         type: string
+      create-release:
+        default: false
+        description: Specifies if a release should be created
+        type: boolean
       deploy-path:
         description: Path to deploy to GitHub Pages
         default: .gh-pages
@@ -59,20 +63,40 @@ jobs:
       - name: Run
         if : ${{ inputs.run-command }}
         run: ${{ inputs.run-command }}
+      - name: Create release
+        if: ${{ inputs.create-release }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const tag = process.env.GITHUB_REF.split('/').slice(-1)[0]
+
+            try {
+              await github.rest.repos.createRelease({
+                draft: false,
+                generate_release_notes: true,
+                name: tag,
+                owner: context.repo.owner,
+                prerelease: false,
+                repo: context.repo.repo,
+                tag_name: tag,
+              })
+            }
+            catch (error) {
+              core.setFailed(error.message)
+            }
       - name: Deploy to GitHub Pages
         env:
           BRANCH_NAME: ${{ inputs.branch-name }}
           DEPLOY_PATH: ${{ inputs.deploy-path }}
         run: |-
-          DEPLOY_PATH="${{ inputs.deploy-path }}"
           ORIGIN_URL="https://${GITHUB_ACTOR}:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git"
 
           # Checkout new branch.
           if [ `git branch | grep $BRANCH_NAME` ]; then git branch -D $BRANCH_NAME; fi
           git checkout -b $BRANCH_NAME
 
-          # Build and move generated files to root, then delete everything else.
-          npm run pages
+          # Move target files to root, then delete everything else.
           find . -maxdepth 1 ! -name '.' ! -name '..' ! -name ${DEPLOY_PATH} ! -name '.git' ! -name '.gitignore' -exec rm -rf {} \;
           mv ${DEPLOY_PATH}/* .
           rm -R ${DEPLOY_PATH}/

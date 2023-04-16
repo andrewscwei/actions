@@ -1,10 +1,6 @@
 on:
   workflow_call:
     inputs:
-      registry:
-        default: https://registry.npmjs.org
-        description: NPM package registry URL
-        type: string
       artifacts-name:
         default: build-artifacts
         description: Name of the artifacts to download
@@ -12,6 +8,14 @@ on:
       artifacts-path:
         description: Path (relative to working directory) to download artifacts to
         required: false
+        type: string
+      create-release:
+        default: false
+        description: Specifies if a release should be created
+        type: boolean
+      registry:
+        default: https://registry.npmjs.org
+        description: NPM package registry URL
         type: string
       run-command:
         description: Command to run before deploying
@@ -59,17 +63,8 @@ jobs:
       - name: Run
         if : ${{ inputs.run-command }}
         run: ${{ inputs.run-command }}
-      - name: Deploy to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token && secrets.npm-auth-token || github.token }}
-        run: |-
-          if npm publish; then
-            echo "Successfully published version \`$(npm pkg get version | sed 's/"//g')\`to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "Failed to publish to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
       - name: Create release
+        if: ${{ inputs.create-release }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ github.token }}
@@ -90,3 +85,13 @@ jobs:
             catch (error) {
               core.setFailed(error.message)
             }
+      - name: Deploy to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token && secrets.npm-auth-token || github.token }}
+        run: |-
+          if npm publish; then
+            echo "Successfully published version \`$(npm pkg get version | sed 's/"//g')\`to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Failed to publish to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
