@@ -92,18 +92,18 @@ jobs:
         run: |-
           ORIGIN_URL="https://${GITHUB_ACTOR}:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git"
 
-          # Checkout new branch.
-          if [ `git branch | grep $BRANCH_NAME` ]; then git branch -D $BRANCH_NAME; fi
+          # Checkout new branch
+          if [[ `git branch | grep $BRANCH_NAME` ]]; then git branch -D $BRANCH_NAME; fi
           git checkout -b $BRANCH_NAME
 
-          # Move target files to root, then delete everything else.
+          # Move target files to root, then delete everything else
           find . -maxdepth 1 ! -name '.' ! -name '..' ! -name ${DEPLOY_PATH} ! -name '.git' ! -name '.gitignore' -exec rm -rf {} \;
           mv ${DEPLOY_PATH}/* .
           rm -R ${DEPLOY_PATH}/
 
           # Push to branch.
           git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR"@users.noreply.github.com"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git add -fA
           git commit --allow-empty -m "[SKIP CI] $(git log -1 --pretty=%B)"
           git push -f $ORIGIN_URL $BRANCH_NAME
