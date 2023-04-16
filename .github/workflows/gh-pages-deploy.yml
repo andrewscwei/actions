@@ -1,10 +1,6 @@
 on:
   workflow_call:
     inputs:
-      registry:
-        default: https://registry.npmjs.org
-        description: NPM package registry URL
-        type: string
       artifacts-name:
         default: build-artifacts
         description: Name of the artifacts to download
@@ -12,6 +8,14 @@ on:
       artifacts-path:
         description: Path (relative to working directory) to download artifacts to
         required: false
+        type: string
+      branch-name:
+        default: gh-pages
+        description: Branch for GitHub Pages
+        type: string
+      deploy-path:
+        description: Path to deploy to GitHub Pages
+        default: .gh-pages
         type: string
       run-command:
         description: Command to run before deploying
@@ -21,12 +25,9 @@ on:
       gh-access-token:
         description: GitHub access token for checking out private repos
         required: false
-      npm-auth-token:
-        description: NPM auth token
-        required: false
 jobs:
   deploy:
-    name: NPM
+    name: GitHub Pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,7 +39,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: .nvmrc
-          registry-url: ${{ inputs.registry }}
       - name: Cache Node modules
         uses: actions/cache@v3
         with:
@@ -51,7 +51,7 @@ jobs:
       - name: Install Node modules
         run: npm install
       - name: Download artifacts
-        if: ${{ inputs.artifacts-path }}
+        if: ${{ inputs.artifacts-name }}
         uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.artifacts-name }}
@@ -59,34 +59,33 @@ jobs:
       - name: Run
         if : ${{ inputs.run-command }}
         run: ${{ inputs.run-command }}
-      - name: Deploy to NPM
+      - name: Deploy to GitHub Pages
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm-auth-token && secrets.npm-auth-token || github.token }}
+          BRANCH_NAME: ${{ inputs.branch-name }}
+          DEPLOY_PATH: ${{ inputs.deploy-path }}
         run: |-
-          if npm publish; then
-            echo "Successfully published version \`$(npm pkg get version | sed 's/"//g')\`to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "Failed to publish to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-      - name: Create release
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            const tag = process.env.GITHUB_REF.split('/').slice(-1)[0]
+          DEPLOY_PATH="${{ inputs.deploy-path }}"
+          ORIGIN_URL="https://${GITHUB_ACTOR}:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git"
 
-            try {
-              await github.rest.repos.createRelease({
-                draft: false,
-                generate_release_notes: true,
-                name: tag,
-                owner: context.repo.owner,
-                prerelease: false,
-                repo: context.repo.repo,
-                tag_name: tag,
-              })
-            }
-            catch (error) {
-              core.setFailed(error.message)
-            }
+          # Checkout new branch.
+          if [ `git branch | grep $BRANCH_NAME` ]; then git branch -D $BRANCH_NAME; fi
+          git checkout -b $BRANCH_NAME
+
+          # Build and move generated files to root, then delete everything else.
+          npm run pages
+          find . -maxdepth 1 ! -name '.' ! -name '..' ! -name ${DEPLOY_PATH} ! -name '.git' ! -name '.gitignore' -exec rm -rf {} \;
+          mv ${DEPLOY_PATH}/* .
+          rm -R ${DEPLOY_PATH}/
+
+          # Push to branch.
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR"@users.noreply.github.com"
+          git add -fA
+          git commit --allow-empty -m "[SKIP CI] $(git log -1 --pretty=%B)"
+          git push -f $ORIGIN_URL $BRANCH_NAME
+
+          if [ $? -ne 0 ]; then
+            exit 1
+          else
+            echo "Successfully published docs to GitHub Pages"
+          fi
