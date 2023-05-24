@@ -39,14 +39,6 @@ on:
       test-command:
         description: Command for running tests
         type: string
-      test-report-path:
-        description: Path to the test report
-        required: false
-        type: string
-      test-reporter:
-        description: Test reporter type
-        required: false
-        type: string
     outputs:
       artifacts-name:
         description: Name of the uploaded artifacts
@@ -157,13 +149,6 @@ jobs:
         with:
           name: ${{ inputs.artifacts-name }}
           path: ${{ inputs.artifacts-path }}
-      - name: Generate test report
-        if: ${{ inputs.test-command && inputs.test-reporter }}
-        uses: dorny/test-reporter@v1
-        with:
-          name: Test Report
-          path: ${{ inputs.test-report-path }}
-          reporter: ${{ inputs.test-reporter }}
       - name: Append summary
         if: ${{ inputs.push }}
         run: |-

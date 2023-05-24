@@ -9,6 +9,10 @@ on:
         description: Artifacts path (relative to working directory)
         required: false
         type: string
+      build-command:
+        default: npm run build
+        description: Build command
+        type: string
       service-image:
         description: Image of the service to use
         required: false
@@ -21,6 +25,10 @@ on:
         default: false
         description: Specifies if tests should run
         type: boolean
+      test-command:
+        default: npm test
+        description: Command for running tests
+        type: string
     outputs:
       artifacts-name:
         description: Name of the uploaded artifacts
@@ -66,7 +74,7 @@ jobs:
       - name: Install Node modules
         run: npm install
       - name: Build
-        run: npm run build
+        run: ${{ inputs.build-command }}
       - name: Store artifacts
         if: ${{ inputs.artifacts-path }}
         uses: actions/upload-artifact@v3
@@ -75,4 +83,4 @@ jobs:
           path: ${{ inputs.artifacts-path }}
       - name: Test
         if: ${{ !inputs.skip-tests }}
-        run: npm test
+        run: ${{ inputs.test-command }}

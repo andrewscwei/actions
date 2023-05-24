@@ -21,7 +21,7 @@ on:
         description: Path to deploy to GitHub Pages
         default: .gh-pages
         type: string
-      run-command:
+      predeploy-command:
         description: Command to run before deploying
         required: false
         type: string
@@ -61,8 +61,8 @@ jobs:
           name: ${{ inputs.artifacts-name }}
           path: ${{ inputs.artifacts-path }}
       - name: Run
-        if : ${{ inputs.run-command }}
-        run: ${{ inputs.run-command }}
+        if : ${{ inputs.predeploy-command }}
+        run: ${{ inputs.predeploy-command }}
       - name: Create release
         if: ${{ inputs.create-release }}
         uses: actions/github-script@v6

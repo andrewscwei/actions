@@ -13,13 +13,13 @@ on:
         default: false
         description: Specifies if a release should be created
         type: boolean
+      predeploy-command:
+        description: Command to run before deploying
+        required: false
+        type: string
       registry:
         default: https://registry.npmjs.org
         description: NPM package registry URL
-        type: string
-      run-command:
-        description: Command to run before deploying
-        required: false
         type: string
     secrets:
       gh-access-token:
@@ -61,8 +61,8 @@ jobs:
           name: ${{ inputs.artifacts-name }}
           path: ${{ inputs.artifacts-path }}
       - name: Run
-        if : ${{ inputs.run-command }}
-        run: ${{ inputs.run-command }}
+        if : ${{ inputs.predeploy-command }}
+        run: ${{ inputs.predeploy-command }}
       - name: Create release
         if: ${{ inputs.create-release }}
         uses: actions/github-script@v6
