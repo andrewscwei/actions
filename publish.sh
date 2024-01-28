@@ -19,6 +19,9 @@ fi
 
 git tag $VERSION
 git push --tags
+
+gh release create ${VERSION} --generate-notes
+
 git tag -fa ${MAJOR_VERSION} -m "Map ${MAJOR_VERSION} to ${VERSION}"
 git push origin ${MAJOR_VERSION} --force
 
