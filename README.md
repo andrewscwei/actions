@@ -7,7 +7,7 @@ This repository contains reusable GitHub workflows.
 ## `node-build`
 
 Builds a Nodejs project.
-  - Infers Node version from `.nvmrc` file at project root
+  - Infers Node version from `.node-version` file at project root
   - Caches NPM modules
   - Option to specify build command (defaults to `npm run build`)
   - Option to specify test command (defaults to `npm test`)
@@ -18,7 +18,7 @@ Builds a Nodejs project.
 ```yml
 jobs:
   build:
-    uses: andrewscwei/workflows/.github/workflows/node-build.yml@master
+    uses: andrewscwei/workflows/.github/workflows/node-build.yml@v1
     with:
       artifacts-name: <string="build-artifacts"> # Artifacts name
       artifacts-path: <string?> # Artifacts path (relative to working directory)
@@ -43,7 +43,7 @@ Builds a Docker image.
 
 ```yml
 deploy:
-  uses: andrewscwei/workflows/.github/workflows/docker-build.yml@master
+  uses: andrewscwei/workflows/.github/workflows/docker-build.yml@v1
   with:
     artifacts-name: <string="build-artifacts"> # Artifacts name
     artifacts-path: <string?> # Artifacts path (relative to working directory)
@@ -66,7 +66,7 @@ Publishes an NPM project to an NPM registry and creates a release on GitHub.
 
 ```yml
 deploy:
-    uses: andrewscwei/workflows/.github/workflows/npm-deploy.yml@master
+    uses: andrewscwei/workflows/.github/workflows/npm-deploy.yml@v1
     with:
       artifacts-name: <string="build-artifacts"> # Name of the artifacts to download
       artifacts-path: <string?> # Path (relative to working directory) to download artifacts to
@@ -88,7 +88,7 @@ Publishes a directory to a branch used for GitHub Pages.
 
 ```yml
 deploy:
-    uses: andrewscwei/workflows/.github/workflows/gh-pages-deploy.yml@master
+    uses: andrewscwei/workflows/.github/workflows/gh-pages-deploy.yml@v1
     with:
       artifacts-name: <string="build-artifacts"> # Name of the artifacts to download
       artifacts-path: <string?> # Path (relative to working directory) to download artifacts to

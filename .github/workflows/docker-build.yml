@@ -63,16 +63,16 @@ jobs:
       image: ${{ inputs.push && fromJSON(steps.metadata.outputs.json).tags[0] || '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.github-token && secrets.github-token || github.token }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
       - name: Build test target
         id: build-test
         if: ${{ inputs.test-command }}
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           cache-from: type=gha,scope=${{ github.workflow }}
           cache-to: type=gha,scope=${{ github.workflow }},mode=max
@@ -88,7 +88,7 @@ jobs:
         run: IMAGE=${{ fromJSON(steps.build-test.outputs.metadata)['image.name'] }} ${{ inputs.test-command }}
       - name: Build prod target
         id: build-prod
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           build-args: ${{ inputs.build-args }}
           cache-from: type=gha,scope=${{ github.workflow }}
@@ -103,7 +103,7 @@ jobs:
       - name: Set up release metadata
         if: ${{ inputs.push }}
         id: metadata
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ format('{0}/', inputs.registry) || '' }}${{ steps.auth.outputs.project_id }}/${{ inputs.image-name }}
           tags: |
@@ -112,7 +112,7 @@ jobs:
             type=sha,prefix=,format=short,priority=1000,suffix=${{ inputs.image-tag-suffix }}
             type=raw,value=latest,suffix=${{ inputs.image-tag-suffix }}
       - name: Push image release to registry
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         if: ${{ inputs.push }}
         with:
           build-args: ${{ inputs.build-args }}
@@ -145,7 +145,7 @@ jobs:
           echo "Copying files from ${IMAGE}... OK"
       - name: Upload artifacts
         if: ${{ inputs.artifacts-path }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifacts-name }}
           path: ${{ inputs.artifacts-path }}

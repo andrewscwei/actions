@@ -35,16 +35,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.gh-access-token && secrets.gh-access-token || github.token }}
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
       - name: Cache Node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-npm-cache-${{ hashFiles('**/package-lock.json') }}
@@ -56,7 +56,7 @@ jobs:
         run: npm install
       - name: Download artifacts
         if: ${{ inputs.artifacts-path }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifacts-name }}
           path: ${{ inputs.artifacts-path }}
@@ -65,7 +65,7 @@ jobs:
         run: ${{ inputs.predeploy-command }}
       - name: Create release
         if: ${{ inputs.create-release }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ github.token }}
           script: |
