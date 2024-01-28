@@ -11,7 +11,15 @@ echo "Creating release for ${VERSION}..."
 
 MAJOR_VERSION="$(cut -d '.' -f 1 <<< "$VERSION")"
 
-# git tag -fa ${MAJOR_VERSION} -m "Map ${MAJOR_VERSION} to ${VERSION}"
-# git push origin ${MAJOR_VERSION} --force
+# Check if tag already exists
+if git ls-remote --tags origin | grep ${VERSION} >/dev/null 2>&1; then
+  echo "Failed to create release for ${VERSION}, a tag with the same value already exists"
+  exit 1
+fi
+
+git tag $VERSION
+git push --tags
+git tag -fa ${MAJOR_VERSION} -m "Map ${MAJOR_VERSION} to ${VERSION}"
+git push origin ${MAJOR_VERSION} --force
 
 echo "Successfully created release for ${VERSION}"
