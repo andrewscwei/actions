@@ -105,7 +105,7 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v5
         with:
-          images: ${{ format('{0}/', inputs.registry) || '' }}${{ steps.auth.outputs.project_id }}/${{ inputs.image-name }}
+          images: ${{ format('{0}/', inputs.registry) || '' }}${{ inputs.image-name }}
           tags: |
             type=ref,event=pr,suffix=${{ inputs.image-tag-suffix }}
             type=semver,pattern={{version}},suffix=${{ inputs.image-tag-suffix }}

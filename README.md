@@ -99,3 +99,11 @@ deploy:
     secrets:
       gh-access-token: <string?> # GitHub access token for checking out private repos
 ```
+
+## Publishing
+
+Run `publish.sh` script with version as argument:
+
+```sh
+$ ./publish.sh v1.0.0
+```
