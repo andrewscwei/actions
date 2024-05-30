@@ -61,7 +61,8 @@ steps:
 
 ## `npm-deploy`
 
-Publishes to an NPM registry.
+Publishes to an NPM registry:
+  - Option to download artifact prior to deploying
 
 ### Usage
 
@@ -70,13 +71,15 @@ steps:
   - name: Deploy
     uses: andrewscwei/actions/npm-deploy@v1
     with:
+      artifact-name: <string="build-artifact">
+      artifact-path: <string?>
       npm-auth-token: <string?>
       registry: <string="https://registry.npmjs.org">
 ```
 
 ## `gh-pages-deploy`
 
-Deploys to GitHub Pages with the option to create a new GitHub release:
+Deploys to GitHub Pages:
   - Option to download artifact prior to deploying
   - Option to execute a command before deploying
   - Option to execute a command after deploying

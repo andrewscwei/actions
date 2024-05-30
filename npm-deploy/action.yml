@@ -1,6 +1,12 @@
 name: NPM
 description: Publishes to an NPM registry
 inputs:
+  artifact-name:
+    default: build-artifact
+    description: Name of the artifact to download
+  artifact-path:
+    description: Path (relative to working directory) to download artifact to
+    required: false
   npm-auth-token:
     description: NPM auth token
     required: false
@@ -10,6 +16,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Download artifact
+      if: ${{ inputs.artifact-path }}
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.artifact-path }}
     - name: Deploy to NPM
       shell: bash
       env:
