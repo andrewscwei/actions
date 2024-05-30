@@ -2,108 +2,97 @@
 
 This repository contains reusable GitHub workflows.
 
-## Workflows
+## Actions
 
-## `node-build`
+## `docker-build-push`
 
-Builds a Nodejs project.
-  - Infers Node version from `.node-version` file at project root
-  - Caches NPM modules
-  - Option to specify build command (defaults to `npm run build`)
-  - Option to specify test command (defaults to `npm test`)
-  - Option to upload built files as artifacts
-
-### Usage
-
-```yml
-jobs:
-  build:
-    uses: andrewscwei/workflows/.github/workflows/node-build.yml@v1
-    with:
-      artifacts-name: <string="build-artifacts"> # Artifacts name
-      artifacts-path: <string?> # Artifacts path (relative to working directory)
-      build-command: <string="npm run build"> # Build command
-      service-image: <string?> # Image of the service to use
-      service-port: <string="8080:8080"> # Port mapping of the service (i.e. <host_port>:<service_container_port>)
-      skip-tests: <boolean=false> # Specifies if tests should run
-      test-command: <string="npm test"> # Command for running tests
-    secrets:
-      gh-access-token: <string?> # GitHub access token for checking out private repos
-```
-
-## `docker-build`
-
-Builds a Docker image.
+Builds and optionally pushes a container image to a registry:
+  - Sets up Docker Buildx
   - Caches multi-step Docker builds
-  - Looks for and builds `prod` multi-step target
-  - Option to run a test command against `test` multi-step target
+  - Option to upload built artifact inside image as artifact
+  - Option to upload built image as artifact
   - Option to push the image to a registry (defaults to Docker Hub)
 
 ### Usage
 
 ```yml
-deploy:
-  uses: andrewscwei/workflows/.github/workflows/docker-build.yml@v1
-  with:
-    artifacts-name: <string="build-artifacts"> # Artifacts name
-    artifacts-path: <string?> # Artifacts path (relative to working directory)
-    build-args: <string?> # List of build-time variables
-    build-secrets: <string?> # List of build-time secrets
-    push: <boolean=false> # Specifies if pushing image to registry
-    image-name: <string="${{ github.repository }}"> # Docker image base name
-    image-tag-suffix: <string?> # Docker image tag suffix
-    registry: <string="hub.docker.com"> # Registry path (required if `push` is `true`)
-    test-command: <string?> # Command for running tests
+steps:
+  - name: Build
+    uses: andrewscwei/actions/docker-build-push@v1
+    with:
+      build-artifact-dir: <string?>
+      build-artifact-name: <string="build-artifact">
+      build-artifact-working-dir: <string="/var/app">
+      build-args: <string?>
+      build-secrets: <string?>
+      dockerfile-path: <string="Dockerfile">
+      github-token: <string?>
+      image-artifact-dir: <string?>
+      image-artifact-name: <string="image-artifact">
+      image-name: <string=${{ github.repository }}>
+      image-tag-suffix: <string?>
+      push: <string="false">
+      registry: <string?>
+```
+
+## `node-build`
+
+Builds and tests a Node.js project:
+  - Infers Node version from `.node-version` file at project root
+  - Caches NPM modules
+  - Option to specify build command (defaults to `npm run build`)
+  - Option to specify prebuild command
+  - Option to specify postbuild command
+  - Option to upload built files as artifact
+
+### Usage
+
+```yml
+steps:
+  - name: Build
+    uses: andrewscwei/actions/node-build@v1
+    with:
+      artifact-name: <string="build-artifact">
+      artifact-path: <string?>
+      build-command: <string="npm run build">
+      postbuild-command: <string?>
+      prebuild-command: <string?>
 ```
 
 ## `npm-deploy`
 
-Publishes an NPM project to an NPM registry and creates a release on GitHub.
-  - Option to download artifacts prior to deploying
-  - Option to execute a command prior to deploying
+Publishes to an NPM registry.
 
 ### Usage
 
 ```yml
-deploy:
-    uses: andrewscwei/workflows/.github/workflows/npm-deploy.yml@v1
+steps:
+  - name: Deploy
+    uses: andrewscwei/actions/npm-deploy@v1
     with:
-      artifacts-name: <string="build-artifacts"> # Name of the artifacts to download
-      artifacts-path: <string?> # Path (relative to working directory) to download artifacts to
-      create-release: <boolean=false> # Specifies if a release should be created
-      predeploy-command: <string?> # Command to run before deploying
-      registry: <string="https://registry.npmjs.org"> # NPM package registry URL
-    secrets:
-      gh-access-token: <string?> # GitHub access token for checking out private repos
-      npm-auth-token: <string?> # NPM auth token
+      npm-auth-token: <string?>
+      registry: <string="https://registry.npmjs.org">
 ```
 
 ## `gh-pages-deploy`
 
-Publishes a directory to a branch used for GitHub Pages.
-  - Option to download artifacts prior to deploying
-  - Option to execute a command prior to deploying
+Deploys to GitHub Pages with the option to create a new GitHub release:
+  - Option to download artifact prior to deploying
+  - Option to execute a command before deploying
+  - Option to execute a command after deploying
 
 ### Usage
 
 ```yml
-deploy:
-    uses: andrewscwei/workflows/.github/workflows/gh-pages-deploy.yml@v1
+steps:
+  - name: Deploy
+    uses: andrewscwei/actions/gh-pages-deploy@v1
     with:
-      artifacts-name: <string="build-artifacts"> # Name of the artifacts to download
-      artifacts-path: <string?> # Path (relative to working directory) to download artifacts to
-      branch-name: <string="gh-pages"> # Branch for GitHub Pages
-      create-release: <boolean=false> # Specifies if a release should be created
-      deploy-path: <string=".gh-pages"> # Path to deploy to GitHub Pages
-      predeploy-command: <string?> # Command to run before deploying to GitHub Pages
-    secrets:
-      gh-access-token: <string?> # GitHub access token for checking out private repos
-```
-
-## Publishing
-
-Run `publish.sh` script with version as argument:
-
-```sh
-$ ./publish.sh v1.0.0
+      artifact-name: <string="build-artifact">
+      artifact-path: <string?>
+      branch-name: <string="gh-pages">
+      deploy-path: <string=".gh-pages">
+      gh-access-token: <string?>
+      postdeploy-command: <string?>
+      predeploy-command: <string?>
 ```

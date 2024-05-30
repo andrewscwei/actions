@@ -1,0 +1,23 @@
+name: NPM
+description: Publishes to an NPM registry
+inputs:
+  npm-auth-token:
+    description: NPM auth token
+    required: false
+  registry:
+    default: https://registry.npmjs.org
+    description: NPM package registry URL
+runs:
+  using: composite
+  steps:
+    - name: Deploy to NPM
+      shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm-auth-token && inputs.npm-auth-token || github.token }}
+      run: |-
+        if npm publish; then
+          echo "Successfully published version \`$(npm pkg get version | sed 's/"//g')\`to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "Failed to publish to NPM registry \`${{ inputs.registry }}\`" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi

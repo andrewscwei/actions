@@ -1,0 +1,53 @@
+name: Build
+description: Builds and tests a Node.js project
+inputs:
+  artifact-name:
+    default: build-artifact
+    description: Artifacts name
+  artifact-path:
+    description: Artifacts path (relative to working directory)
+    required: false
+  build-command:
+    default: npm run build
+    description: Build command
+  postbuild-command:
+    description: Command to run after building
+    required: false
+  prebuild-command:
+    description: Command to run before building
+    required: false
+outputs:
+  artifact-name:
+    description: Name of the uploaded artifacts
+    value: ${{ inputs.artifact-path && inputs.artifact-name || '' }}
+  artifact-path:
+    description: Path of the uploaded artifacts (relative to working directory)
+    value: ${{ inputs.artifact-path }}
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        cache: npm
+        node-version-file: .node-version
+    - name: Install Node modules
+      shell: bash
+      run: npm install
+    - name: Prebuild
+      if: ${{ inputs.prebuild-command }}
+      shell: bash
+      run: ${{ inputs.prebuild-command }}
+    - name: Build
+      shell: bash
+      run: ${{ inputs.build-command }}
+    - name: Postbuild
+      if: ${{ inputs.postbuild-command }}
+      shell: bash
+      run: ${{ inputs.postbuild-command }}
+    - name: Store artifact
+      if: ${{ inputs.artifact-path }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.artifact-path }}
