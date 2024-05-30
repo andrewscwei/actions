@@ -13,8 +13,6 @@ Builds and optionally pushes a container image to a registry:
   - Option to upload built image as artifact
   - Option to push the image to a registry (defaults to Docker Hub)
 
-### Usage
-
 ```yml
 steps:
   - name: Build
@@ -45,8 +43,6 @@ Builds and tests a Node.js project:
   - Option to specify postbuild command
   - Option to upload built files as artifact
 
-### Usage
-
 ```yml
 steps:
   - name: Build
@@ -63,8 +59,6 @@ steps:
 
 Publishes to an NPM registry:
   - Option to download artifact prior to deploying
-
-### Usage
 
 ```yml
 steps:
@@ -84,8 +78,6 @@ Deploys to GitHub Pages:
   - Option to execute a command before deploying
   - Option to execute a command after deploying
 
-### Usage
-
 ```yml
 steps:
   - name: Deploy
@@ -98,4 +90,18 @@ steps:
       gh-access-token: <string?>
       postdeploy-command: <string?>
       predeploy-command: <string?>
+```
+
+## `release`
+
+Publishes a GitHub release.
+
+```yml
+steps:
+  - name: Release
+    uses: andrewscwei/actions/release@v1
+    with:
+      version: <string>
+      draft: <string="false">
+      prerelease: <string="false">
 ```
