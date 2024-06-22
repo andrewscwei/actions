@@ -40,7 +40,7 @@ runs:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.artifact-path }}
     - name: Predeploy
-      if : ${{ inputs.predeploy-command }}
+      if: ${{ inputs.predeploy-command }}
       shell: bash
       run: ${{ inputs.predeploy-command }}
     - name: Deploy to GitHub Pages
@@ -64,7 +64,7 @@ runs:
         git config user.name "$GITHUB_ACTOR"
         git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
         git add -fA
-        git commit --allow-empty -m "[SKIP CI] $(git log -1 --pretty=%B)"
+        git commit --allow-empty -m "$(git log -1 --pretty=%B) [skip ci]"
         git push -f $ORIGIN_URL $BRANCH_NAME
 
         if [ $? -ne 0 ]; then
@@ -73,6 +73,6 @@ runs:
           echo "Successfully published to GitHub pages" >> $GITHUB_STEP_SUMMARY
         fi
     - name: Postdeploy
-      if : ${{ inputs.postdeploy-command }}
+      if: ${{ inputs.postdeploy-command }}
       shell: bash
       run: ${{ inputs.postdeploy-command }}
