@@ -7,6 +7,9 @@ inputs:
   artifact-path:
     description: Path (relative to working directory) to download artifact to
     required: false
+  cname:
+    description: Custom subdomain for GitHub Pages
+    required: false
   branch-name:
     default: gh-pages
     description: Branch for GitHub Pages
@@ -35,6 +38,11 @@ runs:
       if: ${{ inputs.predeploy-command }}
       shell: bash
       run: ${{ inputs.predeploy-command }}
+    - name: Create CNAME file
+      if: ${{ inputs.cname }}
+      shell: bash
+      run: |-
+        echo "${{ inputs.cname }}" > ${{ inputs.deploy-path }}/CNAME
     - name: Deploy to GitHub Pages
       shell: bash
       env:
