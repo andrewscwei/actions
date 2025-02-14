@@ -7,11 +7,12 @@ This repository contains reusable GitHub workflows.
 ## `docker-build-push`
 
 Builds and optionally pushes a container image to a registry:
-  - Sets up Docker Buildx
-  - Caches multi-step Docker builds
-  - Option to upload built artifact inside image as artifact
-  - Option to upload built image as artifact
-  - Option to push the image to a registry (defaults to Docker Hub)
+
+- Sets up Docker Buildx
+- Caches multi-step Docker builds
+- Option to upload built artifact inside image as artifact
+- Option to upload built image as artifact
+- Option to push the image to a registry (defaults to Docker Hub)
 
 ```yml
 steps:
@@ -36,12 +37,13 @@ steps:
 ## `node-build`
 
 Builds and tests a Node.js project:
-  - Infers Node version from `.node-version` file at project root
-  - Caches NPM modules
-  - Option to specify build command (defaults to `npm run build`)
-  - Option to specify prebuild command
-  - Option to specify postbuild command
-  - Option to upload built files as artifact
+
+- Infers Node version from `.node-version` file at project root
+- Caches NPM modules
+- Option to specify build command (defaults to `npm run build`)
+- Option to specify prebuild command
+- Option to specify postbuild command
+- Option to upload built files as artifact
 
 ```yml
 steps:
@@ -58,7 +60,8 @@ steps:
 ## `npm-deploy`
 
 Publishes to an NPM registry:
-  - Option to download artifact prior to deploying
+
+- Option to download artifact prior to deploying
 
 ```yml
 steps:
@@ -74,9 +77,10 @@ steps:
 ## `gh-pages-deploy`
 
 Deploys to GitHub Pages:
-  - Option to download artifact prior to deploying
-  - Option to execute a command before deploying
-  - Option to execute a command after deploying
+
+- Option to download artifact prior to deploying
+- Option to execute a command before deploying
+- Option to execute a command after deploying
 
 ```yml
 steps:
@@ -86,6 +90,7 @@ steps:
       artifact-name: <string="build-artifact">
       artifact-path: <string?>
       branch-name: <string="gh-pages">
+      cname: <string?>
       deploy-path: <string=".gh-pages">
       gh-access-token: <string?>
       postdeploy-command: <string?>
@@ -101,7 +106,7 @@ steps:
   - name: Release
     uses: andrewscwei/actions/release@v1
     with:
-      version: <string>
       draft: <string="false">
       prerelease: <string="false">
+      version: <string>
 ```

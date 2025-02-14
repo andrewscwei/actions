@@ -1,14 +1,14 @@
 name: Release
 description: Publishes a GitHub release
 inputs:
-  version:
-    description: Release version
   draft:
-    default: 'false'
+    default: "false"
     description: Specifies if the release should be a draft
   prerelease:
-    default: 'false'
+    default: "false"
     description: Specifies if the release should be a prerelease
+  version:
+    description: Release version
 runs:
   using: composite
   steps:

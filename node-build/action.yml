@@ -7,14 +7,14 @@ inputs:
   artifact-path:
     description: Artifacts path (relative to working directory)
     required: false
+  build-command:
+    description: Build command (defaults to `<package_manager> run build`)
+    required: false
   node-version-file:
     description: Node.js version file (automatically inferred if unprovided)
     required: false
   package-manager:
     description: Package manager to use (`npm`, `yarn` or `pnpm`, automatically inferred if unprovided)
-    required: false
-  build-command:
-    description: Build command (defaults to `<package_manager> run build`)
     required: false
   postbuild-command:
     description: Command to run after building

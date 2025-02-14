@@ -7,12 +7,12 @@ inputs:
   artifact-path:
     description: Path (relative to working directory) to download artifact to
     required: false
-  cname:
-    description: Custom subdomain for GitHub Pages
-    required: false
   branch-name:
     default: gh-pages
     description: Branch for GitHub Pages
+  cname:
+    description: Custom subdomain for GitHub Pages
+    required: false
   deploy-path:
     description: Path to deploy to GitHub Pages
     default: .gh-pages
