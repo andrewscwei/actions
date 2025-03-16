@@ -56,7 +56,7 @@ runs:
         git checkout -b $BRANCH_NAME
 
         # Move target files to root, then delete everything else
-        find . -maxdepth 1 ! -name '.' ! -name '..' ! -name ${DEPLOY_PATH} ! -name '.git' ! -name '.gitignore' -exec rm -rf {} \;
+        find . -maxdepth 1 ! -name '.' ! -name '..' ! -path "./${DEPLOY_PATH}" ! -path "./$(dirname ${DEPLOY_PATH})" ! -name '.git' ! -name '.gitignore' -exec rm -rf {} \;
         mv ${DEPLOY_PATH}/* .
         rm -R ${DEPLOY_PATH}/
 
