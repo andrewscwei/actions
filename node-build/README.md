@@ -12,7 +12,7 @@ Builds and tests a Node.js project:
 ```yml
 steps:
   - name: Build
-    uses: andrewscwei/actions/node-build@v1
+    uses: andrewscwei/actions/node-build@v2
     with:
       artifact-name: <string="build-artifact">
       artifact-path: <string?>

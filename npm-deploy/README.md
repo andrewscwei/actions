@@ -7,7 +7,7 @@ Publishes to an NPM registry:
 ```yml
 steps:
   - name: Deploy
-    uses: andrewscwei/actions/npm-deploy@v1
+    uses: andrewscwei/actions/npm-deploy@v2
     with:
       artifact-name: <string="build-artifact">
       artifact-path: <string?>
