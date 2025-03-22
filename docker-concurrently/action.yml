@@ -1,0 +1,31 @@
+name: Docker Concurrently
+description: Executes a command while running a Docker container
+inputs:
+  command:
+    description: Command to execute
+    required: true
+  container-port:
+    default: ""
+    description: Container port to expose, defaults to `port`
+    required: false
+  image:
+    description: Docker image to test
+    required: true
+  port:
+    default: "8080"
+    description: The port in which the app is served on
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Run container
+      shell: bash
+      env:
+        CONTAINER_PORT: ${{ inputs.container-port }}
+      run: docker run -d --name=container -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} ${{ inputs.image }}
+    - name: Execute command
+      shell: bash
+      run: ${{ inputs.command }}
+    - name: Stop container
+      shell: bash
+      run: docker stop container && docker rm container

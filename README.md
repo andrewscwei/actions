@@ -7,6 +7,7 @@ A repository containing various composite actions to be used in GitHub Actions w
 | Action | Description |
 | ------ | ----------- |
 | [`andrewscwei/actions/docker-build-push`](docker-build-push) | Builds and optionally pushes a container image to a registry |
+| [`andrewscwei/actions/docker-concurrently`](docker-concurrently) | Executes a command while running a Docker container |
 | [`andrewscwei/actions/gh-pages-deploy`](gh-pages-deploy) | Deploys to GitHub Pages |
 | [`andrewscwei/actions/node-build`](node-build) | Builds and tests a Node.js project |
 | [`andrewscwei/actions/npm-deploy`](npm-deploy) | Publishes to an NPM registry |
