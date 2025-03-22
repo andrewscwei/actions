@@ -11,7 +11,7 @@ Builds and optionally pushes a container image to a registry:
 ```yml
 steps:
   - name: Build
-    uses: andrewscwei/actions/docker-build-push@v1
+    uses: andrewscwei/actions/docker-build-push@v2
     with:
       build-artifact-dir: <string?>
       build-artifact-name: <string="build-artifact">
@@ -45,10 +45,8 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Build
-        uses: andrewscwei/actions/docker-build-push@v1
+        uses: andrewscwei/actions/docker-build-push@v2
         with:
           push: true
           registry: ghcr.io
