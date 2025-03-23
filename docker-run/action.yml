@@ -1,3 +1,7 @@
+# Required permissions if using `GITHUB_TOKEN` to authenticate to GitHub
+# Container Registry:
+#   packages: read
+
 name: Docker Run
 description: Executes a command while running a Docker container
 inputs:
@@ -15,9 +19,25 @@ inputs:
     default: "8080"
     description: The port in which the app is served on
     required: false
+  registry:
+    description: URL of the registry of the Docker container
+    required: false
+  registry-user:
+    description: Username for the registry
+    required: false
+  registry-password:
+    description: Password for the registry
+    required: false
 runs:
   using: composite
   steps:
+    - name: Authenticate to registry
+      if: ${{ inputs.push == 'true' && ((inputs.registry && inputs.registry-user && inputs.registry-password) || inputs.registry == 'ghcr.io') }}
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.registry-user && inputs.registry-user || (inputs.registry == 'ghcr.io' && github.actor || '') }}
+        password: ${{ inputs.registry-password && inputs.registry-password || (inputs.registry == 'ghcr.io' && github.token || '') }}
     - name: Run container
       shell: bash
       env:

@@ -11,6 +11,9 @@ steps:
       container-port: <string?>
       image: <string>
       port: <string?>
+      registry: <string?>
+      registry-user: <string?>
+      registry-password: <string?>
 ```
 
 ## Usage
@@ -23,10 +26,13 @@ jobs:
   build:
     name: Test
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
     steps:
       - name: Test
         uses: andrewscwei/actions/docker-run@v2
         with:
           image: ghcr.io/<owner>/<repo>:latest
           command: npm test
+          registry: ghcr.io
 ```
