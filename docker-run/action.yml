@@ -1,7 +1,3 @@
-# Required permissions if using `GITHUB_TOKEN` to authenticate to GitHub
-# Container Registry:
-#   packages: read
-
 name: Docker Run
 description: Executes a command while running a Docker container
 inputs:
@@ -32,7 +28,7 @@ runs:
   using: composite
   steps:
     - name: Authenticate to registry
-      if: ${{ inputs.push == 'true' && ((inputs.registry && inputs.registry-user && inputs.registry-password) || inputs.registry == 'ghcr.io') }}
+      if: ${{ (inputs.registry && inputs.registry-user && inputs.registry-password) || inputs.registry == 'ghcr.io' }}
       uses: docker/login-action@v3
       with:
         registry: ${{ inputs.registry }}
