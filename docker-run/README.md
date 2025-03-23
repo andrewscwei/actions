@@ -1,11 +1,11 @@
-# `andrewscwei/actions/docker-concurrently`
+# `andrewscwei/actions/docker-run`
 
 Executes a command while running a Docker container.
 
 ```yml
 steps:
   - name: Docker Concurrently
-    uses: andrewscwei/actions/docker-concurrently@v2
+    uses: andrewscwei/actions/docker-run@v2
     with:
       command: <string>
       container-port: <string?>
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test
-        uses: andrewscwei/actions/docker-concurrently@v2
+        uses: andrewscwei/actions/docker-run@v2
         with:
           image: ghcr.io/<owner>/<repo>:latest
           command: npm test

@@ -1,4 +1,4 @@
-name: Docker Concurrently
+name: Docker Run
 description: Executes a command while running a Docker container
 inputs:
   command:
