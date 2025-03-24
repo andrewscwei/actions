@@ -16,8 +16,9 @@ inputs:
   deploy-path:
     description: Path to deploy to GitHub Pages
     default: .gh-pages
-  gh-access-token:
-    description: GitHub access token for checking out private repos
+  github-token:
+    default: ${{ github.token }}
+    description: Custom GitHub token to use
     required: false
   postdeploy-command:
     description: Command to run after deploying
@@ -49,7 +50,7 @@ runs:
         BRANCH_NAME: ${{ inputs.branch-name }}
         DEPLOY_PATH: ${{ inputs.deploy-path }}
       run: |-
-        ORIGIN_URL="https://${GITHUB_ACTOR}:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git"
+        ORIGIN_URL="https://${GITHUB_ACTOR}:${{ inputs.github-token }}@github.com/${GITHUB_REPOSITORY}.git"
 
         # Checkout new branch
         if [[ `git branch | grep $BRANCH_NAME` ]]; then git branch -D $BRANCH_NAME; fi
