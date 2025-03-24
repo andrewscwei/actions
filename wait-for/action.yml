@@ -1,0 +1,45 @@
+name: Wait for command result
+description: Runs a command and waits for the command to yield a result (as described by a regex pattern)
+inputs:
+  command:
+    description: The command to execute
+    required: true
+  result:
+    description: The regex pattern of the result to wait for
+    required: true
+  interval:
+    default: "2"
+    description: The interval in seconds between command executions
+    required: false
+  timeout:
+    default: "30"
+    description: The timeout in seconds
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Run command
+      shell: bash
+      run: |
+        command="${{ inputs.command }}"
+        result="${{ inputs.result }}"
+        interval=${{ inputs.interval }}
+        timeout=${{ inputs.timeout }}
+        end_time=$((SECONDS + timeout))
+
+        while [ $SECONDS -lt $end_time ]; do
+          output=$(eval "$command" 2>&1) || true
+
+          if echo "$output" | grep -Eq "$result"; then
+            echo "Result pattern found for output: $output"
+            exit 0
+          fi
+
+          echo "Result pattern not found, retrying in ${interval}s..."
+
+          sleep "$interval"
+        done
+
+        echo "Timeout reached after ${timeout}s without expected result"
+
+        exit 1
