@@ -9,15 +9,11 @@ Deploys to GitHub Pages:
 ## Usage
 
 ```yml
-jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: andrewscwei/actions/gh-pages-deploy@v2
-        with:
-          deploy-path: build/${{ github.event.repository.name }}
-          predeploy-command: npm run build
+steps:
+  - uses: andrewscwei/actions/gh-pages-deploy@v2
+    with:
+      deploy-path: build/${{ github.event.repository.name }}
+      predeploy-command: npm run build
 ```
 
 ### Inputs
