@@ -13,8 +13,6 @@ Builds and optionally pushes a container image to a registry:
 Example usage for pushing to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry):
 
 ```yml
-# GitHub Actions workflow
-...
 jobs:
   build:
     name: Build
@@ -23,8 +21,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Build
-        uses: andrewscwei/actions/docker-build-push@v2
+      - uses: andrewscwei/actions/docker-build-push@v2
         with:
           push: true
           registry: ghcr.io
