@@ -13,20 +13,16 @@ Builds and optionally pushes a container image to a registry:
 Example usage for pushing to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry):
 
 ```yml
-jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: andrewscwei/actions/docker-build-push@v2
-        with:
-          push: true
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+permissions:
+  contents: read
+  packages: write
+steps:
+  - uses: andrewscwei/actions/docker-build-push@v2
+    with:
+      push: true
+      registry: ghcr.io
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Inputs
