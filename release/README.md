@@ -1,13 +1,24 @@
-# `andrewscwei/actions/release`
+# release
 
 Publishes a GitHub release.
 
+## Usage
+
 ```yml
 steps:
-  - name: Release
-    uses: andrewscwei/actions/release@v2
+  - uses: andrewscwei/actions/release@v2
     with:
-      draft: <string="false">
-      prerelease: <string="false">
-      version: <string>
+      version: v1.0.0
 ```
+
+### Inputs
+
+| Input | Required | Default | Description |
+| ----- | -------- | ------- | ----------- |
+| `draft` | `false` | `false` | Specifies if the release should be a draft |
+| `prerelease` | `false` | `false` | Specifies if the release should be a prerelease |
+| `version` | `true` | | Release version |
+
+### Outputs
+
+This action does not produce any outputs.
