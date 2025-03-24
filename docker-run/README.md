@@ -7,16 +7,12 @@ Executes a command while running a Docker container.
 Example usage to run tests against a Docker image.
 
 ```yml
-jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: andrewscwei/actions/docker-run@v2
-        with:
-          image: ghcr.io/<owner>/<repo>:latest
-          command: npm test
-          registry: ghcr.io
+steps:
+  - uses: andrewscwei/actions/docker-run@v2
+    with:
+      image: ghcr.io/<owner>/<repo>:latest
+      command: npm test
+      registry: ghcr.io
 ```
 
 ### Inputs
