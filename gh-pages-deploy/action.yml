@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy GitHub Pages site
 description: Deploys to GitHub Pages with the option to create a new GitHub release
 inputs:
   artifact-name:

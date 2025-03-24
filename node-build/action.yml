@@ -1,4 +1,4 @@
-name: Build
+name: Build Node.js project
 description: Builds and tests a Node.js project
 inputs:
   artifact-name:

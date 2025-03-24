@@ -3,7 +3,7 @@
 #   contents: read
 #   packages: write
 
-name: Build
+name: Build/Push Docker image
 description: Builds and optionally pushes a container image to a registry
 inputs:
   build-artifact-dir:

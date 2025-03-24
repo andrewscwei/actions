@@ -1,4 +1,4 @@
-name: Release
+name: Publish GitHub release
 description: Publishes a GitHub release
 inputs:
   draft:

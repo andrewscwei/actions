@@ -1,4 +1,4 @@
-name: NPM
+name: Deploy to NPM registry
 description: Publishes to an NPM registry
 inputs:
   artifact-name:
