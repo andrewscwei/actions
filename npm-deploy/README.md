@@ -1,4 +1,4 @@
-# npm-deploy
+# `andrewscwei/actions/npm-deploy` ![GitHub Release](https://img.shields.io/github/v/release/andrewscwei/actions?label=latest)
 
 Publishes to an NPM registry:
 

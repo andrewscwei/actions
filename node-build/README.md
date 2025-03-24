@@ -1,4 +1,4 @@
-# node-build
+# `andrewscwei/actions/node-build` ![GitHub Release](https://img.shields.io/github/v/release/andrewscwei/actions?label=latest)
 
 Builds and tests a Node.js project:
 

@@ -1,4 +1,4 @@
-# docker-build-push
+# `andrewscwei/actions/docker-build-push` ![GitHub Release](https://img.shields.io/github/v/release/andrewscwei/actions?label=latest)
 
 Builds and optionally pushes a container image to a registry:
 

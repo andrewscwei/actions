@@ -1,4 +1,4 @@
-# gh-pages-deploy
+# `andrewscwei/actions/gh-pages-deploy` ![GitHub Release](https://img.shields.io/github/v/release/andrewscwei/actions?label=latest)
 
 Deploys to GitHub Pages:
 

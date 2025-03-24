@@ -1,4 +1,4 @@
-# docker-run
+# `andrewscwei/actions/docker-run` ![GitHub Release](https://img.shields.io/github/v/release/andrewscwei/actions?label=latest)
 
 Executes a command while running a Docker container.
 

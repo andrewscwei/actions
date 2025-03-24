@@ -1,4 +1,4 @@
-# release
+# `andrewscwei/actions/release` ![GitHub Release](https://img.shields.io/github/v/release/andrewscwei/actions?label=latest)
 
 Publishes a GitHub release.
 
