@@ -1,4 +1,4 @@
-# `andrewscwei/actions/gh-pages-deploy`
+# gh-pages-deploy
 
 Deploys to GitHub Pages:
 
@@ -9,18 +9,15 @@ Deploys to GitHub Pages:
 ## Usage
 
 ```yml
-steps:
-  - name: Deploy
-    uses: andrewscwei/actions/gh-pages-deploy@v2
-    with:
-      artifact-name: <string="build-artifact">
-      artifact-path: <string?>
-      branch-name: <string="gh-pages">
-      cname: <string?>
-      deploy-path: <string=".gh-pages">
-      gh-access-token: <string?>
-      postdeploy-command: <string?>
-      predeploy-command: <string?>
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: andrewscwei/actions/gh-pages-deploy@v2
+        with:
+          deploy-path: build/${{ github.event.repository.name }}
+          predeploy-command: npm run build
 ```
 
 ### Inputs
