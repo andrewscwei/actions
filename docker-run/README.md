@@ -21,6 +21,7 @@ steps:
 | ----- | -------- | ------- | ----------- |
 | `command` | `true` | | Command to execute |
 | `container-port` | `false` | `${{ inputs.port }}` | Container port to expose, defaults to `port` |
+| `host` | `false` | `false` | Whether to run the container in host network mode |
 | `image` | `true` | | Docker image to test |
 | `port` | `false` | `8080` | The port in which the app is served on |
 | `registry` | `false` | | URL of the registry of the Docker container |

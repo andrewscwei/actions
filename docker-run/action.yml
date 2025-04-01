@@ -8,6 +8,10 @@ inputs:
     default: ""
     description: Container port to expose, defaults to `port`
     required: false
+  host:
+    default: "false"
+    description: Whether to run the container in host network mode
+    required: false
   image:
     description: Docker image to test
     required: true
@@ -38,7 +42,7 @@ runs:
       shell: bash
       env:
         CONTAINER_PORT: ${{ inputs.container-port }}
-      run: docker run -d --name=container -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} ${{ inputs.image }}
+      run: docker run -d --name=container ${{ inputs.host == 'true' && '--network host' || '' }} -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} ${{ inputs.image }}
     - name: Execute command
       shell: bash
       run: ${{ inputs.command }}
