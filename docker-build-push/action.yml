@@ -158,5 +158,5 @@ runs:
       run: |-
         echo "Successfully pushed image with tags:" >> $GITHUB_STEP_SUMMARY
         echo '${{ steps.metadata.outputs.json }}' | jq -r '.tags[]' | while read tag; do
-          echo "- [\`${tag}\`](https://${{ inputs.registry && '' || 'registry.hub.docker.com/' }}${tag})" >> $GITHUB_STEP_SUMMARY
+          echo "- [\`${tag}\`](${{ inputs.registry == '' && '' || 'https://registry.hub.docker.com/' }}${tag})" >> $GITHUB_STEP_SUMMARY
         done
