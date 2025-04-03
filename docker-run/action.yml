@@ -8,6 +8,9 @@ inputs:
     default: ""
     description: Container port to expose, defaults to `port`
     required: false
+  env:
+    description: Environment variables to set in the container (newline-delimited string)
+    required: false
   host:
     default: "false"
     description: Whether to run the container in host network mode
@@ -42,7 +45,18 @@ runs:
       shell: bash
       env:
         CONTAINER_PORT: ${{ inputs.container-port }}
-      run: docker run -d --name=container ${{ inputs.host == 'true' && '--network host' || '' }} -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} ${{ inputs.image }}
+      run: |
+        ENV_FLAGS=""
+        while IFS= read -r line; do
+          [[ -z "$line" ]] && continue
+          ENV_FLAGS="$ENV_FLAGS -e $line"
+        done <<< "${{ inputs.env }}"
+
+        docker run -d $ENV_FLAGS \
+          --name=container \
+          -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} \
+          ${{ inputs.host == 'true' && '--network host' || '' }} \
+          ${{ inputs.image }}
     - name: Execute command
       shell: bash
       run: ${{ inputs.command }}
