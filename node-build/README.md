@@ -27,6 +27,7 @@ steps:
 | `artifact-name` | `false` | `build-artifact` | Artifacts name |
 | `artifact-path` | `false` | | Artifacts path (relative to working directory) |
 | `build-command` | `false` | `npm run build` | Build command (defaults to `<package_manager> run build`) |
+| `install-command` | `false` | | Install command (defaults to `<package_manager> install`) |
 | `node-version-file` | `false` | | Node.js version file (automatically inferred if unprovided) |
 | `package-manager` | `false` | | Package manager to use (`npm`, `yarn` or `pnpm`, automatically inferred if unprovided) |
 | `postbuild-command` | `false` | | Command to run after building |

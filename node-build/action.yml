@@ -10,6 +10,9 @@ inputs:
   build-command:
     description: Build command (defaults to `<package_manager> run build`)
     required: false
+  install-command:
+    description: Install command (defaults to `<package_manager> install`)
+    required: false
   node-version-file:
     description: Node.js version file (automatically inferred if unprovided)
     required: false
@@ -65,7 +68,12 @@ runs:
         node-version-file: ${{ steps.prepare.outputs.node_version_file }}
     - name: Install Node modules
       shell: bash
-      run: ${{ steps.prepare.outputs.package_manager }} install
+      run: |
+        if [ '${{ inputs.install-command }}' != '' ]; then
+          ${{ inputs.install-command }}
+        else
+          ${{ steps.prepare.outputs.package_manager }} install
+        fi
     - name: Prebuild
       if: ${{ inputs.prebuild-command }}
       shell: bash
