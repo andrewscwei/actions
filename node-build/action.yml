@@ -68,12 +68,7 @@ runs:
         node-version-file: ${{ steps.prepare.outputs.node_version_file }}
     - name: Install Node modules
       shell: bash
-      run: |
-        if [ '${{ inputs.install-command }}' != '' ]; then
-          ${{ inputs.install-command }}
-        else
-          ${{ steps.prepare.outputs.package_manager }} install
-        fi
+      run: ${{ inputs.install-command || format('{0} install', steps.prepare.outputs.package_manager) }}
     - name: Prebuild
       if: ${{ inputs.prebuild-command }}
       shell: bash
