@@ -50,6 +50,7 @@ steps:
 | ------ | ----------- |
 | `build-artifact-dir` | Path to the directory of the uploaded artifact of built files (relative to working directory) |
 | `build-artifact-name` | Name of the uploaded artifact of built files |
+| `digest` | The digest of the built Docker image |
 | `image` | The full name of built Docker image, including the registry, image name and tag (highest priority tag is used) |
 | `image-artifact-dir` | Path to the directory of the uploaded artifact of the built image (absolute or relative to working directory) |
 | `image-artifact-file` | Path to the uploaded artifact of the built image (absolute or relative to working directory) |

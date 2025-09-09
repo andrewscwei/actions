@@ -55,6 +55,9 @@ outputs:
   build-artifact-name:
     description: Name of the uploaded artifact of built files
     value: ${{ inputs.build-artifact-dir && inputs.build-artifact-name || '' }}
+  digest:
+    description: The digest of the built Docker image
+    value: ${{ steps.build.outputs.digest }}
   image:
     description: The full name of built Docker image, including the registry, image name and tag (highest priority tag is used)
     value: ${{ steps.parsed.outputs.image }}
@@ -156,7 +159,9 @@ runs:
       shell: bash
       if: ${{ inputs.push == 'true' }}
       run: |-
-        echo "Successfully pushed image with tags:" >> $GITHUB_STEP_SUMMARY
+        echo "Successfully pushed image:" >> $GITHUB_STEP_SUMMARY
+        echo "- Digest: \`${{ steps.build.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- Tags:" >> $GITHUB_STEP_SUMMARY
         echo '${{ steps.metadata.outputs.json }}' | jq -r '.tags[]' | while read tag; do
-          echo "- [\`${tag}\`](${{ inputs.registry == '' && 'https://registry.hub.docker.com/' || 'https://' }}${tag})" >> $GITHUB_STEP_SUMMARY
+          echo "    - [\`${tag}\`](${{ inputs.registry == '' && 'https://registry.hub.docker.com/' || 'https://' }}${tag})" >> $GITHUB_STEP_SUMMARY
         done
