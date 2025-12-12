@@ -52,6 +52,8 @@ runs:
           ENV_FLAGS="$ENV_FLAGS -e $line"
         done <<< "${{ inputs.env }}"
 
+        echo "Running ${{ inputs.image }} with env flags: ${ENV_FLAGS}..."
+
         docker run -d $ENV_FLAGS \
           --name=container \
           -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} \
