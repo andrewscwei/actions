@@ -115,8 +115,8 @@ runs:
           ${{ inputs.build-args }}
           SHA=${{ steps.parsed.outputs.sha }}
           SHORT_SHA=${{ steps.parsed.outputs.short_sha }}
-        cache-from: type=gha,scope=${{ github.workflow }}
-        cache-to: type=gha,scope=${{ github.workflow }},mode=max
+        cache-from: type=gha,scope=nocachefilter
+        cache-to: type=gha,scope=nocachefilter,mode=max
         context: .
         file: ${{ inputs.dockerfile-path }}
         labels: ${{ steps.metadata.outputs.labels }}
