@@ -59,6 +59,8 @@ runs:
           -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} \
           ${{ inputs.host == 'true' && '--network host' || '' }} \
           ${{ inputs.image }}
+
+        docker logs -f container &
     - name: Execute command
       shell: bash
       run: ${{ inputs.command }}
