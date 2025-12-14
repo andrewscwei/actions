@@ -59,11 +59,13 @@ runs:
           -p ${{ inputs.port }}:${CONTAINER_PORT:-${{ inputs.port }}} \
           ${{ inputs.host == 'true' && '--network host' || '' }} \
           ${{ inputs.image }}
-
-        docker logs -f container &
     - name: Execute command
       shell: bash
       run: ${{ inputs.command }}
+    - name: Show container logs
+      shell: bash
+      if: failure()
+      run: docker logs container
     - name: Stop container
       shell: bash
       run: docker stop container && docker rm container
