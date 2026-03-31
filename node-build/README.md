@@ -1,6 +1,6 @@
 # `andrewscwei/actions/node-build` ![GitHub Release](https://img.shields.io/github/v/release/andrewscwei/actions?label=latest)
 
-Builds and tests a Node.js project:
+Builds a Node.js project:
 
 - Infers Node version from `.node-version` / `.tool-versions` / `.nvmrc` file at project root
 - Caches NPM modules

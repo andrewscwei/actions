@@ -1,5 +1,5 @@
 name: Build Node.js project
-description: Builds and tests a Node.js project
+description: Builds a Node.js project
 inputs:
   artifact-name:
     default: build-artifact
