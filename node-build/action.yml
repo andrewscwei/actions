@@ -60,9 +60,9 @@ runs:
         fi
     - name: Set up PNPM
       if: ${{ steps.prepare.outputs.package_manager == 'pnpm' }}
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v6
     - name: Set up Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         cache: ${{ steps.prepare.outputs.package_manager }}
         node-version-file: ${{ steps.prepare.outputs.node_version_file }}
@@ -82,7 +82,7 @@ runs:
       run: ${{ inputs.postbuild-command }}
     - name: Store artifact
       if: ${{ inputs.artifact-path }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.artifact-path }}

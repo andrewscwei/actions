@@ -36,7 +36,7 @@ runs:
   steps:
     - name: Authenticate to registry
       if: ${{ (inputs.registry && inputs.registry-user && inputs.registry-password) || inputs.registry == 'ghcr.io' }}
-      uses: docker/login-action@v3
+      uses: docker/login-action@v4
       with:
         registry: ${{ inputs.registry }}
         username: ${{ inputs.registry-user && inputs.registry-user || (inputs.registry == 'ghcr.io' && github.actor || '') }}
