@@ -1,6 +1,9 @@
 name: Publish GitHub release
 description: Publishes a GitHub release
 inputs:
+  body:
+    description: Release notes, prepended to the auto-generated notes
+    required: false
   draft:
     default: "false"
     description: Specifies if the release should be a draft
@@ -14,18 +17,24 @@ runs:
   steps:
     - name: Publish release
       uses: actions/github-script@v9
+      env:
+        BODY: ${{ inputs.body }}
+        DRAFT: ${{ inputs.draft }}
+        PRERELEASE: ${{ inputs.prerelease }}
+        VERSION: ${{ inputs.version }}
       with:
         github-token: ${{ github.token }}
         script: |
-          const tag = '${{ inputs.version }}'.split('/').slice(-1)[0]
+          const tag = process.env.VERSION.split('/').slice(-1)[0]
 
           try {
             await github.rest.repos.createRelease({
-              draft: ${{ inputs.draft }},
+              body: process.env.BODY || undefined,
+              draft: process.env.DRAFT === 'true',
               generate_release_notes: true,
               name: tag,
               owner: context.repo.owner,
-              prerelease: ${{ inputs.prerelease }},
+              prerelease: process.env.PRERELEASE === 'true',
               repo: context.repo.repo,
               tag_name: tag,
             })

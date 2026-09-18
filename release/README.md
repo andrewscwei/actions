@@ -15,6 +15,7 @@ steps:
 
 | Input | Required | Default | Description |
 | ----- | -------- | ------- | ----------- |
+| `body` | `false` | | Release notes, prepended to the auto-generated notes |
 | `draft` | `false` | `false` | Specifies if the release should be a draft |
 | `prerelease` | `false` | `false` | Specifies if the release should be a prerelease |
 | `version` | `true` | | Release version |
