@@ -36,6 +36,7 @@ steps:
 | `build-args` | `false` | | List of build-time arguments (newline-delimited string) |
 | `build-secrets` | `false` | | List of build-time secrets (newline-delimited string) |
 | `cache-mounts` | `false` | `false` | Specifies if the contents of `RUN --mount=type=cache` mounts in the Dockerfile should be persisted across workflow runs |
+| `cache-mounts-key` | `false` | | Key that identifies the persisted cache mount contents, which are only re-saved when the key changes (defaults to the commit SHA) |
 | `dockerfile-path` | `false` | `Dockerfile` | Path to the Dockerfile (relative to context) |
 | `image-artifact-dir` | `false` | | Path to the directory containing the built image for artifact upload (absolute or relative to working directory) |
 | `image-artifact-name` | `false` | `image-artifact` | Name of the artifact containing the built image to be uploaded |

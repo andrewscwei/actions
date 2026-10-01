@@ -24,6 +24,9 @@ inputs:
   cache-mounts:
     default: 'false'
     description: Specifies if the contents of `RUN --mount=type=cache` mounts in the Dockerfile should be persisted across workflow runs
+  cache-mounts-key:
+    description: Key that identifies the persisted cache mount contents, which are only re-saved when the key changes (defaults to the commit SHA)
+    required: false
   dockerfile-path:
     default: Dockerfile
     description: Path to the Dockerfile (relative to context)
@@ -98,7 +101,7 @@ runs:
       uses: actions/cache@v6
       with:
         path: ${{ runner.temp }}/cache-mounts
-        key: cache-mounts-${{ inputs.image-name }}${{ inputs.image-tag-suffix }}-${{ github.sha }}
+        key: cache-mounts-${{ inputs.image-name }}${{ inputs.image-tag-suffix }}-${{ inputs.cache-mounts-key || github.sha }}
         restore-keys: cache-mounts-${{ inputs.image-name }}${{ inputs.image-tag-suffix }}-
     - name: Inject cache mounts
       if: ${{ inputs.cache-mounts == 'true' }}
@@ -137,8 +140,8 @@ runs:
           ${{ inputs.build-args }}
           SHA=${{ steps.parsed.outputs.sha }}
           SHORT_SHA=${{ steps.parsed.outputs.short_sha }}
-        cache-from: type=gha,scope=nocachefilter
-        cache-to: type=gha,scope=nocachefilter,mode=max
+        cache-from: type=gha,scope=${{ inputs.image-name }}${{ inputs.image-tag-suffix }}
+        cache-to: type=gha,scope=${{ inputs.image-name }}${{ inputs.image-tag-suffix }},mode=max
         context: .
         file: ${{ inputs.dockerfile-path }}
         labels: ${{ steps.metadata.outputs.labels }}
