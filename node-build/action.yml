@@ -60,13 +60,17 @@ runs:
         fi
     - name: Set up PNPM
       if: ${{ steps.prepare.outputs.package_manager == 'pnpm' }}
-      uses: pnpm/action-setup@v6
+      uses: pnpm/setup@v3
+      with:
+        cache: true
     - name: Set up Node
-      uses: actions/setup-node@v6
+      if: ${{ steps.prepare.outputs.package_manager != 'pnpm' }}
+      uses: actions/setup-node@v7
       with:
         cache: ${{ steps.prepare.outputs.package_manager }}
         node-version-file: ${{ steps.prepare.outputs.node_version_file }}
     - name: Install Node modules
+      if: ${{ steps.prepare.outputs.package_manager != 'pnpm' }}
       shell: bash
       run: ${{ inputs.install-command || format('{0} install', steps.prepare.outputs.package_manager) }}
     - name: Prebuild
