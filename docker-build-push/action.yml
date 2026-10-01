@@ -21,6 +21,9 @@ inputs:
   build-secrets:
     description: List of build-time secrets (newline-delimited string)
     required: false
+  cache-mounts:
+    default: 'false'
+    description: Specifies if the contents of `RUN --mount=type=cache` mounts in the Dockerfile should be persisted across workflow runs
   dockerfile-path:
     default: Dockerfile
     description: Path to the Dockerfile (relative to context)
@@ -87,7 +90,25 @@ runs:
         username: ${{ inputs.registry-user && inputs.registry-user || (inputs.registry == 'ghcr.io' && github.actor || '') }}
         password: ${{ inputs.registry-password && inputs.registry-password || (inputs.registry == 'ghcr.io' && github.token || '') }}
     - name: Set up Docker Buildx
+      id: buildx
       uses: docker/setup-buildx-action@v4
+    - name: Restore cache mounts
+      id: cache-mounts
+      if: ${{ inputs.cache-mounts == 'true' }}
+      uses: actions/cache@v6
+      with:
+        path: ${{ runner.temp }}/cache-mounts
+        key: cache-mounts-${{ inputs.image-name }}${{ inputs.image-tag-suffix }}-${{ github.sha }}
+        restore-keys: cache-mounts-${{ inputs.image-name }}${{ inputs.image-tag-suffix }}-
+    - name: Inject cache mounts
+      if: ${{ inputs.cache-mounts == 'true' }}
+      uses: reproducible-containers/buildkit-cache-dance@v3
+      with:
+        builder: ${{ steps.buildx.outputs.name }}
+        cache-dir: ${{ runner.temp }}/cache-mounts
+        dockerfile: ${{ inputs.dockerfile-path }}
+        scratch-dir: ${{ runner.temp }}/cache-mounts-scratch
+        skip-extraction: ${{ steps.cache-mounts.outputs.cache-hit }}
     - name: Set up metadata
       id: metadata
       uses: docker/metadata-action@v6

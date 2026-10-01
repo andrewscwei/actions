@@ -4,6 +4,7 @@ Builds and optionally pushes a container image to a registry:
 
 - Sets up Docker Buildx
 - Caches multi-step Docker builds
+- Option to persist `RUN --mount=type=cache` mounts across workflow runs
 - Option to upload built artifact inside image as artifact
 - Option to upload built image as artifact
 - Option to push the image to a registry (defaults to Docker Hub)
@@ -34,6 +35,7 @@ steps:
 | `build-artifact-working-dir` | `false` | `/var/app` | Absolute path to the container’s working directory to set the upload location for built files (newline-delimited string, no trailing slash) |
 | `build-args` | `false` | | List of build-time arguments (newline-delimited string) |
 | `build-secrets` | `false` | | List of build-time secrets (newline-delimited string) |
+| `cache-mounts` | `false` | `false` | Specifies if the contents of `RUN --mount=type=cache` mounts in the Dockerfile should be persisted across workflow runs |
 | `dockerfile-path` | `false` | `Dockerfile` | Path to the Dockerfile (relative to context) |
 | `image-artifact-dir` | `false` | | Path to the directory containing the built image for artifact upload (absolute or relative to working directory) |
 | `image-artifact-name` | `false` | `image-artifact` | Name of the artifact containing the built image to be uploaded |
